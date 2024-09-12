@@ -1,0 +1,23 @@
+# TODO:
+# When this is called from another branch, make sure you can echo the parameter provided by the other branch. This should be branch name. 
+name: dummy
+
+on:
+    workflow_call:
+        inputs:
+            branch-name:
+                description: 'The branch to do nothing on'
+                required: true
+                type: string
+
+jobs:
+    do-nothing:
+        name: Do Nothing
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: First Step of Nothing
+              run: |
+                echo "Im gonna do nothing on the following branch ${{ github.event.inputs.branch-name}}"
+
+
