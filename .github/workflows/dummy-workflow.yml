@@ -9,6 +9,9 @@ on:
                 description: 'The branch to do nothing on'
                 required: true
                 type: string
+        outputs:
+            success-message:
+                value: ${{ jobs.do-nothing.outputs.output1 }}
     push:
         branches:
         - integ-tests
@@ -22,7 +25,7 @@ jobs:
             - name: Worfklow call test
               if: github.event_name == 'workflow_call'
               run: |
-                echo "Im being invoked by the following branch: ${{ inputs.branch-name }}"
+                echo "Im being invoked by the following branch: ${{ inputs.branch-name }}" >> $GITHUB_OUTPUT
             - name: Push call tests
               if: github.event_name == 'push'
               run: |
