@@ -1,0 +1,13 @@
+name: Approval Workflow
+
+on:
+    workflow_dispatch:
+    # pull_request_review:
+    #   types: [submitted]
+jobs:
+    approved:
+        # if: github.event.review.state == 'approved'
+        uses: dani-chmb/amazon-ecs-deploy-task-definition/.github/workflows/dummy-workflow.yml@integ-tests
+        with:
+          branch-name: ${{ github.ref_name }}
+              
