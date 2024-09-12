@@ -9,6 +9,7 @@ jobs:
         # if: github.event.review.state == 'approved'
         runs-on: ubuntu-latest
         steps:
+            - uses: actions/checkout@v2
             - name: Run Integration Tests
               uses: ./.github/workflows/dummy-workflow.yml@integ-tests
               with:
