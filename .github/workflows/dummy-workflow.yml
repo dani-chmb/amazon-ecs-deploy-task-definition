@@ -18,6 +18,6 @@ jobs:
         steps:
             - name: First Step of Nothing
               run: |
-                echo "Im gonna do nothing on the following branch ${{ github.event.inputs.branch-name}}"
+                echo "Im gonna do nothing on the following branch ${{ inputs.branch-name}}"
 
 
