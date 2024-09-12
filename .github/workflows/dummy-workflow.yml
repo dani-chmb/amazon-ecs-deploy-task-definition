@@ -20,9 +20,11 @@ jobs:
     do-nothing:
         name: Do Nothing
         runs-on: ubuntu-latest
+        outputs:
+            output1: ${{ steps.workflow-call-test.outputs.success-message}}
 
         steps:
-            - name: Worfklow call test
+            - id: workflow-call-test
               if: github.event_name == 'workflow_call'
               run: |
                 echo "Im being invoked by the following branch: ${{ inputs.branch-name }}" >> $GITHUB_OUTPUT
