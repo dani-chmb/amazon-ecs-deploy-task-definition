@@ -19,11 +19,11 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: First Step of Nothing
+            - name: Worfklow call test
               if: github.event_name == 'workflow_call'
               run: |
-                echo "I'm being invoked by the following branch: ${{ inputs.branch-name }}"
-            - name:
+                echo "Im being invoked by the following branch: ${{ inputs.branch-name }}"
+            - name: Push call tests
               if: github.event_name == 'push'
               run: |
                 echo "I'm being invoked by push"
