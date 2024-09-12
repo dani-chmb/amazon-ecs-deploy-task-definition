@@ -9,6 +9,9 @@ on:
                 description: 'The branch to do nothing on'
                 required: true
                 type: string
+    push:
+        branches:
+        - integ-tests
 
 jobs:
     do-nothing:
@@ -17,7 +20,12 @@ jobs:
 
         steps:
             - name: First Step of Nothing
+              if: github.event_name == 'workflow_call'
               run: |
-                echo "Im gonna do nothing on the following branch ${{ inputs.branch-name }}"
+                echo "I'm being invoked by the following branch: ${{ inputs.branch-name }}"
+            - name:
+              if: github.event_name == 'push'
+              run: |
+                echo "I'm being invoked by push"
 
 
