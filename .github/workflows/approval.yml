@@ -7,11 +7,13 @@ on:
 jobs:
     approved:
         # if: github.event.review.state == 'approved'
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2
-            - name: Run Integration Tests
-              uses: ./.github/workflows/dummy-workflow.yml@integ-tests
-              with:
-                branch-name: ${{ github.head_ref }}
+        uses: dani-chmb/amazon-ecs-deploy-task-definition/.github/workflows/dummy-workflow.yml@integ-tests
+        with:
+          branch-name: ${{ github.head_ref }}
+        # steps:
+        #     - uses: actions/checkout@v2
+        #     - name: Run Integration Tests
+        #       uses: ./.github/workflows/dummy-workflow.yml@integ-tests
+        #       with:
+        #         branch-name: ${{ github.head_ref }}
               
