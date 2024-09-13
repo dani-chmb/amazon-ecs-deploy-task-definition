@@ -8,7 +8,7 @@ on:
 jobs:
     approved:
         # if: github.event.review.state == 'approved'
-        uses: dani-chmb/amazon-ecs-deploy-task-definition/.github/workflows/dummy-workflow.yml@integ-tests
+        uses: dani-chmb/amazon-ecs-deploy-task-definition/.github/workflows/test-workflow.yml@integ-tests
         with:
           branch-name: ${{ github.head_ref }}
     ack_ack:
