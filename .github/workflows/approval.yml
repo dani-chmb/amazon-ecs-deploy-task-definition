@@ -15,5 +15,5 @@ jobs:
         runs-on: ubuntu-latest
         needs: approved
         steps:
-          - run: echo ${{ needs.approved.outputs.ack }}"
+          - run: echo ${{ needs.approved.outputs.ack }}
               
