@@ -1,6 +1,6 @@
 name: Approval Workflow
 
-# dummy commit
+# dummy pr
 
 on:
     pull_request_review:
