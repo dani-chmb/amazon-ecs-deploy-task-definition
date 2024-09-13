@@ -37,6 +37,7 @@ jobs:
         echo Integration test run: githubactionsamazonecsdeplo-NWcjHIgDJLXw:8500e78f-34dc-404f-a2bd-afddbe5f0139
     
     - name: Dummy job
+      if: github.event.name == 'workflow_call'
       id: dummy
       run: echo "An acknowledgement message with branch name ${{ inputs.branch-name }}" >> $GITHUB_OUTPUT
 
