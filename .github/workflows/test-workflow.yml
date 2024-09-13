@@ -1,9 +1,16 @@
-# on:
-#   push:
-#     branches:
-#       - integ-tests
 on:
-  workflow_dispatch:
+  push: # Occurs as part of the release pipeline, or equivalently, as part of the run_integ_test.sh script ran by the CICD bot
+    branches:
+      - integ-tests
+  workflow_call: # Occurs when called by a topic branch upon pull-request approval
+    inputs:
+        branch-name:
+            required: true
+            type: string
+    outputs:
+      ack:
+        value: ${{ jobs.deploy.outputs.mssg }}
+
 
 name: Integration Test
 
@@ -16,51 +23,72 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
 
+    outputs:
+      mssg: ${{ steps.dummy.outputs.ack }}
+
     steps:
     - name: Checkout
       uses: actions/checkout@v2
 
     - name: Print current build ID
+      # Only relevant if this workflow is a step of the release pipeline
+      if: github.event.name == 'push'
       run: |
         echo Integration test run: githubactionsamazonecsdeplo-NWcjHIgDJLXw:8500e78f-34dc-404f-a2bd-afddbe5f0139
+    
+    - name: Dummy job
+      id: dummy
+      run: echo "An acknowledgement message with branch name ${{ inputs.branch-name }}" >> $GITHUB_OUTPUT
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActionsDeployTaskIntegrationTests
-        role-session-name: deploy_task_integration_tests
-        aws-region: us-west-2
 
-    - name: Deploy Amazon ECS task definition with one-off task and wait for task stopped set to false
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: task-definition-run-task.json
-        cluster: github-actions-deploy-task-def-integ-test
-        run-task: true
-        run-task-subnets: subnet-e5604fce, subnet-fe9355b4, subnet-c49431bc, subnet-392f9b64
-        run-task-assign-public-IP: ENABLED
-        run-task-security-groups: sg-067ebcde49c0f3ad8
-        run-task-launch-type: FARGATE
-        wait-for-task-stopped: false
+    # - name: Configure AWS credentials
+    #   uses: aws-actions/configure-aws-credentials@v4
+    #   with:
+    #     role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActionsDeployTaskIntegrationTests
+    #     role-session-name: deploy_task_integration_tests
+    #     aws-region: us-west-2
 
-    - name: Deploy Amazon ECS task definition with one-off task and wait for task stopped set to true
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: task-definition-run-task.json
-        cluster: github-actions-deploy-task-def-integ-test
-        run-task: true
-        run-task-subnets: subnet-e5604fce, subnet-fe9355b4, subnet-c49431bc, subnet-392f9b64
-        run-task-assign-public-IP: ENABLED
-        run-task-security-groups: sg-067ebcde49c0f3ad8
-        run-task-launch-type: FARGATE
-        wait-for-task-stopped: true
-        enable-ecs-managed-tags: true
+    # - name: Deploy Amazon ECS task definition with one-off task and wait for task stopped set to false
+    #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+    #   with:
+    #     task-definition: task-definition-run-task.json
+    #     cluster: github-actions-deploy-task-def-integ-test
+    #     run-task: true
+    #     run-task-subnets: subnet-e5604fce, subnet-fe9355b4, subnet-c49431bc, subnet-392f9b64
+    #     run-task-assign-public-IP: ENABLED
+    #     run-task-security-groups: sg-067ebcde49c0f3ad8
+    #     run-task-launch-type: FARGATE
+    #     wait-for-task-stopped: false
 
-    - name: Deploy Amazon ECS task definition with ECS Service
-      uses: aws-actions/amazon-ecs-deploy-task-definition@82e46a89773204998cca74ab511e71c8eed45fc5
-      with:
-        task-definition: task-definition.json
-        service: github-actions-deploy-task-def-integ-test
-        cluster: github-actions-deploy-task-def-integ-test
-        wait-for-service-stability: true
-        enable-ecs-managed-tags: true
+    # - name: Deploy Amazon ECS task definition with one-off task and wait for task stopped set to true
+    #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+    #   with:
+    #     task-definition: task-definition-run-task.json
+    #     cluster: github-actions-deploy-task-def-integ-test
+    #     run-task: true
+    #     run-task-subnets: subnet-e5604fce, subnet-fe9355b4, subnet-c49431bc, subnet-392f9b64
+    #     run-task-assign-public-IP: ENABLED
+    #     run-task-security-groups: sg-067ebcde49c0f3ad8
+    #     run-task-launch-type: FARGATE
+    #     wait-for-task-stopped: true
+    #     enable-ecs-managed-tags: true
+
+    # - name: Deploy Amazon ECS task definition with ECS Service (push)
+    #   if: github.event.name == 'push'
+    #   uses: aws-actions/amazon-ecs-deploy-task-definition@82e46a89773204998cca74ab511e71c8eed45fc5
+    #   with:
+    #     task-definition: task-definition.json
+    #     service: github-actions-deploy-task-def-integ-test
+    #     cluster: github-actions-deploy-task-def-integ-test
+    #     wait-for-service-stability: true
+    #     enable-ecs-managed-tags: true
+
+    # - name: Deploy Amazon ECS task definition with ECS Service (workflow call)
+    #   if: github.event.name == 'workflow_call'
+    #   uses: aws-actions/amazon-ecs-deploy-task-definition@82e46a89773204998cca74ab511e71c8eed45fc5
+    #   with:
+    #     task-definition: task-definition.json
+    #     service: github-actions-deploy-task-def-integ-test
+    #     cluster: github-actions-deploy-task-def-integ-test
+    #     wait-for-service-stability: true
+    #     enable-ecs-managed-tags: true
