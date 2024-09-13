@@ -11,4 +11,9 @@ jobs:
         uses: dani-chmb/amazon-ecs-deploy-task-definition/.github/workflows/dummy-workflow.yml@integ-tests
         with:
           branch-name: ${{ github.head_ref }}
+    ack_ack:
+        runs-on: ubuntu-latest
+        needs: approved
+        steps:
+          - run: echo "I received a message: ${{needs.approved.outputs.ack}}"
               
