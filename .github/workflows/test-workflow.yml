@@ -9,6 +9,10 @@ on:
           type: string
           # need this parameter since "if github.event_name == 'workflow_call'" is not working
           # https://github.com/actions/runner/issues/3146
+        commit_sha:
+            required: true
+            type: string
+        
         called_from_branch: 
           required: true
           type: boolean
@@ -35,19 +39,13 @@ jobs:
       if: github.event_name == 'push'
       run: |
         echo Integration test run: githubactionsamazonecsdeplo-NWcjHIgDJLXw:8500e78f-34dc-404f-a2bd-afddbe5f0139
-    
-    - name: Dummy job
-      if: inputs.called_from_branch == true
-      run: |
-        echo "An acknowledgement message with branch name ${{ inputs.branch_name }}"
 
-
-    # - name: Configure AWS credentials
-    #   uses: aws-actions/configure-aws-credentials@v4
-    #   with:
-    #     role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActionsDeployTaskIntegrationTests
-    #     role-session-name: deploy_task_integration_tests
-    #     aws-region: us-west-2
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActionsDeployTaskIntegrationTests
+        role-session-name: deploy_task_integration_tests
+        aws-region: us-west-2
 
     # - name: Deploy Amazon ECS task definition with one-off task and wait for task stopped set to false
     #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
@@ -84,12 +82,12 @@ jobs:
     #     wait-for-service-stability: true
     #     enable-ecs-managed-tags: true
 
-    # - name: Deploy Amazon ECS task definition with ECS Service (workflow call)
-    #   if: github.event.name == 'workflow_call'
-    #   uses: aws-actions/amazon-ecs-deploy-task-definition@82e46a89773204998cca74ab511e71c8eed45fc5
-    #   with:
-    #     task-definition: task-definition.json
-    #     service: github-actions-deploy-task-def-integ-test
-    #     cluster: github-actions-deploy-task-def-integ-test
-    #     wait-for-service-stability: true
-    #     enable-ecs-managed-tags: true
+    - name: Deploy Amazon ECS task definition with ECS Service (workflow call)
+      if: inputs.called_from_branch == true
+      uses: aws-actions/amazon-ecs-deploy-task-definition@${{ branch_name }}
+      with:
+        task-definition: task-definition.json
+        service: github-actions-deploy-task-def-integ-test
+        cluster: github-actions-deploy-task-def-integ-test
+        wait-for-service-stability: true
+        enable-ecs-managed-tags: true
