@@ -7,10 +7,6 @@ on:
         branch-name:
             required: true
             type: string
-    outputs:
-      ack:
-        value: ${{ jobs.deploy.outputs.mssg }}
-
 
 name: Integration Test
 
@@ -23,12 +19,12 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
 
-    outputs:
-      mssg: ${{ steps.dummy.outputs.ack }}
-
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+
+    - name: Sanity check
+      run: echo "Sanity check"
 
     - name: Print current build ID
       # Only relevant if this workflow is a step of the release pipeline
@@ -39,7 +35,8 @@ jobs:
     - name: Dummy job
       if: github.event.name == 'workflow_call'
       id: dummy
-      run: echo "An acknowledgement message with branch name ${{ inputs.branch-name }}" >> $GITHUB_OUTPUT
+      run: |
+        echo "An acknowledgement message with branch name ${{ inputs.branch-name }}"
 
 
     # - name: Configure AWS credentials
