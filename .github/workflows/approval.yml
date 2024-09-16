@@ -12,7 +12,7 @@ jobs:
     logging:
       runs-on: ubuntu-latest
       steps:
-        - run: echo "Echoing ${{ github.head_ref }}"
+        - run: echo "Echoing ${{ github.ref_name }}"
       
     approved:
       # if: github.event.review.state == 'approved'
