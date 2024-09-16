@@ -4,15 +4,14 @@ on:
       - integ-tests
   workflow_call: # Occurs when called by a topic branch upon pull-request approval
     inputs:
-        branch-name:
+        branch_name:
           required: true
           type: string
-          # need this parameter since "if github.event_name != 'workflow_call'" is not working
+          # need this parameter since "if github.event_name == 'workflow_call'" is not working
           # https://github.com/actions/runner/issues/3146
-        called-from-branch: 
+        called_from_branch: 
           required: true
           type: boolean
-          default: false
 
 name: Integration Test
 
@@ -33,14 +32,14 @@ jobs:
       run: echo "Sanity check"
 
     - name: Print current build ID
-      if: inputs.called-from-branch == 'false'
+      if: github.event_name == 'push'
       run: |
         echo Integration test run: githubactionsamazonecsdeplo-NWcjHIgDJLXw:8500e78f-34dc-404f-a2bd-afddbe5f0139
     
     - name: Dummy job
-      if: inputs.called-from-branch == 'true'
+      if: inputs.called_from_branch == 'true'
       run: |
-        echo "An acknowledgement message with branch name ${{ inputs.branch-name }}"
+        echo "An acknowledgement message with branch name ${{ inputs.branch_name }}"
 
 
     # - name: Configure AWS credentials
