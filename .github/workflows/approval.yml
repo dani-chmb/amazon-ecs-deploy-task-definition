@@ -1,27 +1,14 @@
 name: Approval Workflow
 
-# dummy pr
-
 on:
   pull_request_review:
     types: [submitted]
-  push: # only for testing
-    branches:
-      - topic
-jobs:
-    logging:
-      runs-on: ubuntu-latest
-      steps:
-        - run: echo "Echoing ${{ github.event.pull_request.head.ref }}"
-      
+
+jobs: 
     approved:
       # if: github.event.review.state == 'approved'
       uses: dani-chmb/amazon-ecs-deploy-task-definition/.github/workflows/test-workflow.yml@integ-tests
       with:
-        branch-name: ${{ github.event.pull_request.head.ref }}
-    ack_ack:
-      runs-on: ubuntu-latest
-      needs: approved
-      steps:
-        - run: echo ${{ needs.approved.outputs.ack }}
+        branch_name: ${{ github.event.pull_request.head.ref }}
+        called_from_branch: true
             
