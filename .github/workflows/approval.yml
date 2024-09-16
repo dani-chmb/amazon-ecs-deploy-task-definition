@@ -7,13 +7,12 @@ on:
     types: [submitted]
   push: # only for testing
     branches:
-      - master
       - topic
 jobs:
     logging:
       runs-on: ubuntu-latest
       steps:
-        - run: echo "Echoing ${{ github.head_ref }}""
+        - run: echo "Echoing ${{ github.head_ref }}"
       
     approved:
       # if: github.event.review.state == 'approved'
