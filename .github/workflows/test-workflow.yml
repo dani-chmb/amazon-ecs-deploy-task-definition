@@ -86,12 +86,12 @@ jobs:
     #     wait-for-service-stability: true
     #     enable-ecs-managed-tags: true
 
-    # - name: Deploy Amazon ECS task definition with ECS Service (branch call)
-    #   if: inputs.called_from_branch == true
-    #   uses: aws-actions/amazon-ecs-deploy-task-definition
-    #   with:
-    #     task-definition: none
-    #     service: none
-    #     cluster: none
-    #     wait-for-service-stability: false
-    #     enable-ecs-managed-tags: false
+    - name: Deploy Amazon ECS task definition with ECS Service (branch call)
+      if: inputs.called_from_branch == true
+      uses: aws-actions/amazon-ecs-deploy-task-definition
+      with:
+        task-definition: task-definition.json
+        service: github-actions-deploy-task-def-integ-test
+        cluster: github-actions-deploy-task-def-integ-test
+        wait-for-service-stability: true
+        enable-ecs-managed-tags: true
