@@ -26,15 +26,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout (push)
+    # - name: Checkout (push)
+    - name: Checkout
       if: github.event_name == 'push'
       uses: actions/checkout@v2
 
-    - name: Checkout (branch_call)
-      if: inputs.called_from_branch == true
-      uses: actions/checkout@v2
-      with:
-        ref: ${{ inputs.branch_name }}
+    # - name: Checkout (branch_call)
+    #   if: inputs.called_from_branch == true
+    #   uses: actions/checkout@v2
+    #   with:
+    #     ref: ${{ inputs.branch_name }}
 
     - name: Sanity check
       run: echo "Sanity check"
@@ -90,8 +91,8 @@ jobs:
       if: inputs.called_from_branch == true
       uses: ./
       with:
-        task-definition: task-definition.json
-        service: github-actions-deploy-task-def-integ-test
-        cluster: github-actions-deploy-task-def-integ-test
+        task-definition: none
+        service: none
+        cluster: none
         wait-for-service-stability: true
         enable-ecs-managed-tags: true
