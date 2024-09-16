@@ -12,13 +12,13 @@ jobs:
     logging:
       runs-on: ubuntu-latest
       steps:
-        - run: echo "Echoing ${{ github.ref_name }}"
+        - run: echo "Echoing ${{ github.event.pull_request.head.ref }}"
       
     approved:
       # if: github.event.review.state == 'approved'
       uses: dani-chmb/amazon-ecs-deploy-task-definition/.github/workflows/test-workflow.yml@integ-tests
       with:
-        branch-name: ${{ github.head_ref }}
+        branch-name: ${{ github.event.pull_request.head.ref }}
     ack_ack:
       runs-on: ubuntu-latest
       needs: approved
