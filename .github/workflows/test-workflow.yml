@@ -28,7 +28,7 @@ jobs:
     steps:
     # - name: Checkout (push)
     - name: Checkout
-      if: github.event_name == 'push'
+      # if: github.event_name == 'push'
       uses: actions/checkout@v2
 
     # - name: Checkout (branch_call)
