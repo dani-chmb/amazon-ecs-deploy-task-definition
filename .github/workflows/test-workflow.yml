@@ -7,12 +7,9 @@ on:
         branch_name:
           required: true
           type: string
-          # need this parameter since "if github.event_name == 'workflow_call'" is not working
-          # https://github.com/actions/runner/issues/3146
-        commit_sha:
-            required: true
-            type: string
-        
+
+        # need this parameter since "if github.event_name == 'workflow_call'" is not working
+        # https://github.com/actions/runner/issues/3146
         called_from_branch: 
           required: true
           type: boolean
