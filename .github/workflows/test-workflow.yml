@@ -36,8 +36,13 @@ jobs:
       with:
         ref: ${{ inputs.branch_name }}
 
-    - name: Sanity check
-      run: echo "Sanity check"
+    - name: Log Current Working Directory
+      run: |
+        echo "Current working directory: $(pwd)"
+
+    - name: Log GitHub Workspace
+      run: |
+        echo "GitHub workspace: ${{ github.workspace }}"
 
     - name: Print current build ID
       if: github.event_name == 'push'
