@@ -34,9 +34,7 @@ jobs:
       if: inputs.called_from_branch == true
       uses: actions/checkout@v2
       with:
-        repository: aws-actions/amazon-ecs-deploy-task-definition
         ref: ${{ inputs.branch_name }}
-        path: amazon-ecs-deploy-task-definition
 
     - name: Sanity check
       run: echo "Sanity check"
@@ -90,7 +88,7 @@ jobs:
 
     - name: Deploy Amazon ECS task definition with ECS Service (branch call)
       if: inputs.called_from_branch == true
-      uses: ./amazon-ecs-deploy-task-definition
+      uses: ./
       with:
         task-definition: none
         service: none
