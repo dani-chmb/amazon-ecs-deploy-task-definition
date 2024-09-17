@@ -30,11 +30,11 @@ jobs:
       if: github.event_name == 'push'
       uses: actions/checkout@v2
 
-    - name: Checkout (branch_call)
-      if: inputs.called_from_branch == true
-      uses: actions/checkout@v2
-      with:
-        ref: ${{ inputs.branch_name }}
+    # - name: Checkout (branch_call)
+    #   if: inputs.called_from_branch == true
+    #   uses: actions/checkout@v2
+    #   with:
+    #     ref: ${{ inputs.branch_name }}
 
     - name: Log Current Working Directory
       run: |
