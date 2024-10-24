@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - integ-tests
-  workflow_call: # Turns this workflow into a reusable workflow
+  workflow_call: # Turns this workflow into a reusable workflow that can be called from another branch upon PR approval
     inputs:
       # !! This parameter is used because we can't use `if: ${{ github.event_name != 'workflow_call' }}`
       # https://github.com/actions/runner/issues/3146
